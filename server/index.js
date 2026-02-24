@@ -10,6 +10,7 @@ const server = express();
 
 server.use(express.json());
 server.use(cors());
+
 server.use("/login", userrouter);
 server.use("/register", userrouter);
 

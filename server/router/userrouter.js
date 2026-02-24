@@ -4,37 +4,39 @@ import db from "../dataDBConnections.js";
 const router = express.Router();
 
 // Register Route
-router.post("/register", async (req, res) => {
-  const { agentID, passcode } = req.body;
+// router.post("/", async (req, res) => {
 
-  if (!agentID || !passcode) {
-    return res.status(400).json({ message: "Agent ID and Passcode required" });
-  }
+//   const { agentID, passcode } = req.body;
 
-  try {
-    // Check if agent already exists
-    const [existing] = await db.query(
-      "SELECT * FROM agents WHERE agentID = ?",
-      [agentID],
-    );
-    if (existing.length > 0) {
-      return res.status(409).json({ message: "Agent ID already registered" });
-    }
+//   if (!agentID || !passcode) {
+//     return res.status(400).json({ message: "Agent ID and Passcode required" });
+//   }
 
-    // Create new agent
-    await db.query("INSERT INTO agents (agentID, passcode) VALUES (?, ?)", [
-      agentID,
-      passcode,
-    ]);
-    res.status(201).json({ message: "Registration successful" });
-  } catch (error) {
-    console.error("Database error:", error);
-    res.status(500).json({ message: "Internal System Error" });
-  }
-});
+//   try {
+//     // Check if agent already exists
+//     const [existing] = await db.query(
+//       "SELECT * FROM agents WHERE agentID = ?",
+//       [agentID],
+//     );
+//     if (existing.length > 0) {
+//       return res.status(409).json({ message: "Agent ID already registered" });
+//     }
+
+//     // Create new agent
+//     await db.query("INSERT INTO agents (agentID, passcode) VALUES (?, ?)", [
+//       agentID,
+//       passcode,
+//     ]);
+//     res.status(201).json({ message: "Registration successful" });
+//   } catch (error) {
+//     console.error("Database error:", error);
+//     res.status(500).json({ message: "Internal System Error" });
+//   }
+// });
 
 // Login Route
-router.post("/login", async (req, res) => {
+router.post("/", async (req, res) => {
+  console.log ("Inside Router")
   const { agentID, passcode } = req.body;
 
   if (!agentID || !passcode) {
@@ -42,7 +44,7 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const [agents] = await db.query("SELECT * FROM agents WHERE agentID = ?", [
+    const [agents] = await db.query("SELECT * FROM users WHERE agentID = ?", [
       agentID,
     ]);
 

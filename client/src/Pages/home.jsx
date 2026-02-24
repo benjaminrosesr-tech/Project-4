@@ -7,6 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import riddlerBg from "../imgs/riddlercode.jpg";
+import axios from 'axios'
 
 function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -22,14 +23,19 @@ function Home() {
   const handleShow = () => setShowModal(true);
 
   const handleSubmit = async (e) => {
+    console.log ("submit")
     e.preventDefault();
-    const endpoint = isRegistering
-      ? "http://localhost:4000/register"
-      : "http://localhost:4000/login";
+    console.log ("1")
+    //let response = await axios.post("http://localhost:4000/login")
+    //console.log ("2")
+    //console.log (response)
+     const endpoint = isRegistering
+       ? "http://localhost:4000/register"
+       : "http://localhost:4000/login";
 
-    try {
+     try {
       const response = await fetch(endpoint, {
-        method: "POST",
+        method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ agentID, passcode }),
       });
