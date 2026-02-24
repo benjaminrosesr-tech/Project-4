@@ -7,7 +7,7 @@ import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import riddlerBg from "../imgs/riddlercode.jpg";
-import axios from 'axios'
+import axios from "axios";
 
 function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -15,6 +15,7 @@ function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [agentID, setagentID] = useState("");
   const [passcode, setpasscode] = useState("");
+  const [email, setEmail] = useState("");
 
   const handleClose = () => {
     setShowModal(false);
@@ -23,21 +24,21 @@ function Home() {
   const handleShow = () => setShowModal(true);
 
   const handleSubmit = async (e) => {
-    console.log ("submit")
+    console.log("submit");
     e.preventDefault();
-    console.log ("1")
+    console.log("1");
     //let response = await axios.post("http://localhost:4000/login")
     //console.log ("2")
     //console.log (response)
-     const endpoint = isRegistering
-       ? "http://localhost:4000/register"
-       : "http://localhost:4000/login";
+    const endpoint = isRegistering
+      ? "http://localhost:4000/user/register"
+      : "http://localhost:4000/user/login";
 
-     try {
+    try {
       const response = await fetch(endpoint, {
         method: "post",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ agentID, passcode }),
+        body: JSON.stringify({ agentID, passcode, email }),
       });
 
       const data = await response.json();
@@ -201,6 +202,20 @@ function Home() {
                 required
               />
             </Form.Group>
+
+            {isRegistering && (
+              <Form.Group className="mb-3" controlId="formBasicEmail">
+                <Form.Label>EMAIL ADDRESS</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter Email"
+                  className="riddler-input"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </Form.Group>
+            )}
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label>PASSCODE</Form.Label>
