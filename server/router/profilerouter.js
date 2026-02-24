@@ -7,6 +7,7 @@ const router = express.Router();
 
 // GET Profile by Agent ID
 router.get("/:agentID", (req, res) => {
+  console.log("inside profile router, get")
   const agentID = req.params.agentID;
   const q = "SELECT * FROM user_profiles WHERE userID = ?";
 
@@ -18,24 +19,18 @@ router.get("/:agentID", (req, res) => {
 
 // POST (Create or Update) Profile
 router.post("/", (req, res) => {
-  const { agentID, name, location, blurb, pictureUrl } = req.body;
+  console.log (req.body)
+  const { full_name, location, bio, profile_picture_url } = req.body;
 
   const q = `
     INSERT INTO user_profiles (full_name, location, bio, profile_picture_url) 
-    VALUES (?, ?, ?, ?, ?) 
-    ON DUPLICATE KEY UPDATE 
-    full_name = ?, location = ?, bio = ?, profile_picture_url = ?
+    VALUES (?, ?, ?, ?) 
   `;
   const values = [
-    agentID,
-    name,
+    full_name,
     location,
-    blurb,
-    pictureUrl,
-    name,
-    location,
-    blurb,
-    pictureUrl,
+    bio,
+    profile_picture_url,
   ];
 
   db.query(q, values, (err, data) => {

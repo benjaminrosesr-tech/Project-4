@@ -5,8 +5,8 @@ const router = express.Router();
 
 // Register Route
 router.post("/register", async (req, res) => {
-
-  const { agentID, passcode } = req.body;
+ console.log (req.body)
+  const { agentID, passcode, email } = req.body;
 
   if (!agentID || !passcode) {
     return res.status(400).json({ message: "Agent ID and Passcode required" });
@@ -23,9 +23,10 @@ router.post("/register", async (req, res) => {
     }
 
     // Create new agent
-    await db.query("INSERT INTO users (agentID, passcode) VALUES (?, ?)", [
+    await db.query("INSERT INTO users (agentID, passcode, email) VALUES (?, ?, ?)", [
       agentID,
       passcode,
+      email,
     ]);
     res.status(201).json({ message: "Registration successful" });
   } catch (error) {

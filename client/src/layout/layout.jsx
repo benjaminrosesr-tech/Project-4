@@ -15,9 +15,6 @@ function Layout() {
               <Nav.Link as={Link} to="/">
                 Home
               </Nav.Link>
-              <Nav.Link as={Link} to="/profile">
-                Profile
-              </Nav.Link>
               <Nav.Link as={Link} to="/assylumlogs">
                 Assylum
               </Nav.Link>
