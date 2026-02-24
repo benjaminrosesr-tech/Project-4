@@ -11,8 +11,9 @@ import riddlerBg from "../imgs/riddlercode.jpg";
 function Home() {
   const [showModal, setShowModal] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [agentID, setagentID] = useState("");
+  const [passcode, setpasscode] = useState("");
 
   const handleClose = () => {
     setShowModal(false);
@@ -24,13 +25,14 @@ function Home() {
     e.preventDefault();
     if (isRegistering) {
       console.log("Initiating registration protocol...", {
-        username,
-        password,
+        agentID,
+        passcode,
       });
       // Registration logic here
     } else {
-      console.log("Initiating login protocol...", { username, password });
+      console.log("Initiating login protocol...", { agentID, passcode });
       // Login logic here
+      setIsLoggedIn(true);
     }
     handleClose();
   };
@@ -120,25 +122,34 @@ function Home() {
       </style>
       <div className="riddler-overlay">
         <Container>
-          <Row className="justify-content-center">
-            <Col md={10} lg={8}>
-              <div className="riddler-card text-center">
-                <h1 className="display-1 neon-text mb-4">RIDDLER'S ASYLUM</h1>
-                <p className="h3 mb-5">
-                  &lt; SYSTEM_READY /&gt;
-                  <br />
-                  DECRYPTING LOGS...
-                </p>
-                <Button
-                  variant="outline-success"
-                  className="btn-neon px-5 py-2"
-                  onClick={handleShow}
-                >
-                  INITIATE PROTOCOL
-                </Button>
-              </div>
-            </Col>
-          </Row>
+          {isLoggedIn ? (
+            <div className="text-center">
+              <h1 className="display-1 neon-text mb-4">
+                WELCOME AGENT {agentID}
+              </h1>
+              <p className="h3 mb-5">ACCESS GRANTED. SYSTEM UNLOCKED.</p>
+            </div>
+          ) : (
+            <Row className="justify-content-center">
+              <Col md={10} lg={8}>
+                <div className="riddler-card text-center">
+                  <h1 className="display-1 neon-text mb-4">RIDDLER'S ASYLUM</h1>
+                  <p className="h3 mb-5">
+                    &lt; SYSTEM_READY /&gt;
+                    <br />
+                    DECRYPTING LOGS...
+                  </p>
+                  <Button
+                    variant="outline-success"
+                    className="btn-neon px-5 py-2"
+                    onClick={handleShow}
+                  >
+                    INITIATE PROTOCOL
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          )}
         </Container>
       </div>
 
@@ -164,7 +175,7 @@ function Home() {
                 placeholder="Enter ID"
                 className="riddler-input"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setagentID(e.target.value)}
                 required
               />
             </Form.Group>
@@ -175,8 +186,8 @@ function Home() {
                 type="password"
                 placeholder="Enter Passcode"
                 className="riddler-input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={passcode}
+                onChange={(e) => setpasscode(e.target.value)}
                 required
               />
             </Form.Group>
