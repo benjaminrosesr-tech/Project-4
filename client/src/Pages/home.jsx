@@ -23,18 +23,34 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isRegistering) {
-      console.log("Initiating registration protocol...", {
-        agentID,
-        passcode,
+    const endpoint = isRegistering
+      ? "http://localhost:4000/register"
+      : "http://localhost:4000/login";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ agentID, passcode }),
       });
-      // Registration logic here
-    } else {
-      console.log("Initiating login protocol...", { agentID, passcode });
-      // Login logic here
-      setIsLoggedIn(true);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        if (isRegistering) {
+          alert("IDENTITY REGISTERED. PROCEED TO LOGIN.");
+          setIsRegistering(false);
+        } else {
+          setIsLoggedIn(true);
+          handleClose();
+        }
+      } else {
+        alert(`ACCESS DENIED: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Connection error:", error);
+      alert("SYSTEM ERROR: UNABLE TO CONNECT TO MAINFRAME");
     }
-    handleClose();
   };
 
   return (
@@ -174,7 +190,7 @@ function Home() {
                 type="text"
                 placeholder="Enter ID"
                 className="riddler-input"
-                value={username}
+                value={agentID}
                 onChange={(e) => setagentID(e.target.value)}
                 required
               />

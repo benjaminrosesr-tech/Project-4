@@ -5,11 +5,14 @@ import userrouter from "./router/userrouter.js";
 
 
 
+
 const server = express();
 
 server.use(express.json());
 server.use(cors());
-server.use("/", userrouter);
+server.use("/login", userrouter);
+server.use("/register", userrouter);
+
 server.get("/", (req, res) => {
   res.send("The server is running");
 });
