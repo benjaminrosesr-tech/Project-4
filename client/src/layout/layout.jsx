@@ -10,13 +10,16 @@ function Layout() {
       <header>
         <Navbar bg="dark" data-bs-theme="dark">
           <Container>
-            <Navbar.Brand>Happy Wife</Navbar.Brand>
+            <Navbar.Brand>Riddlers Assylum</Navbar.Brand>
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/">
-                Honey Doo
+                Home
               </Nav.Link>
-              <Nav.Link as={Link} to="/Contact">
-                Contact
+              <Nav.Link as={Link} to="/profile">
+                Profile
+              </Nav.Link>
+              <Nav.Link as={Link} to="/assylumlogs">
+                Assylum
               </Nav.Link>
             </Nav>
           </Container>
@@ -26,7 +29,7 @@ function Layout() {
         <Outlet />
       </main>
       <footer>
-        <p> &copy; 2026 Happy Wife</p>
+        <p> &copy; 2026 Riddlers Assylum</p>
       </footer>
     </>
   );

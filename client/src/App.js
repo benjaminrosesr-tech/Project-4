@@ -1,9 +1,9 @@
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Layout from './pages/layout/Layout';
-import Home from './pages/home';
-import Profile from './pages/profile';
-import Assylum from './pages/assylumlogs';
+import Layout from './layout/layout';
+import Home from './Pages/home';
+import Profile from './Pages/profile';
+import Assylum from './Pages/assylumlogs';
 import { BrowserRouter, HashRouter, Routes, Route, Link} from "react-router-dom";
 
 
@@ -27,4 +27,4 @@ function App() {
 
 export default App;
 
-export default App;
+

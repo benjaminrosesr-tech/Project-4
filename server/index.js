@@ -1,13 +1,15 @@
 import express from "express";
 import cors from "cors";
-import yourRouter from "./Routers/yourRouter.js";
+import db from "./dataDBConnections.js";
+import userrouter from "./router/userrouter.js";
+
 
 
 const server = express();
 
 server.use(express.json());
 server.use(cors());
-server.use("/abc", yourRouter);
+server.use("/", userrouter);
 server.get("/", (req, res) => {
   res.send("The server is running");
 });
