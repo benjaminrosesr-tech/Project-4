@@ -3,6 +3,7 @@ import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import riddlerBg from "../imgs/riddlercode.jpg";
 
@@ -11,6 +12,10 @@ function AssylumLogs() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [newQuestion, setNewQuestion] = useState({ title: "", content: "" });
+  const [showAnswerModal, setShowAnswerModal] = useState(false);
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  const [currentAnswers, setCurrentAnswers] = useState([]);
+  const [answerInput, setAnswerInput] = useState("");
 
   useEffect(() => {
     // Fetch categories from the database
@@ -70,6 +75,40 @@ function AssylumLogs() {
           `Failed to add log: ${err.response?.data?.message || err.message}`,
         );
       });
+  };
+
+  const handleQuestionClick = (question) => {
+    setActiveQuestion(question);
+    const qID = question.questionID || question.id;
+
+    // Fetch answers for this question
+    axios
+      .get(`http://localhost:4000/answers/${qID}`)
+      .then((res) => setCurrentAnswers(res.data))
+      .catch((err) => console.error("Error fetching answers:", err));
+
+    setShowAnswerModal(true);
+  };
+
+  const handleAnswerSubmit = (e) => {
+    e.preventDefault();
+    const userID = localStorage.getItem("userID");
+    if (!userID) return alert("Please log in to answer.");
+
+    const qID = activeQuestion.questionID || activeQuestion.id;
+
+    axios
+      .post("http://localhost:4000/answers", {
+        questionID: qID,
+        userID,
+        answer: answerInput,
+      })
+      .then(() => {
+        setAnswerInput("");
+        return axios.get(`http://localhost:4000/answers/${qID}`);
+      })
+      .then((res) => setCurrentAnswers(res.data))
+      .catch((err) => alert("Failed to add answer"));
   };
 
   return (
@@ -159,6 +198,18 @@ function AssylumLogs() {
             box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
             border-color: #39ff14;
           }
+
+          .riddler-modal {
+            background-color: #000 !important;
+            border: 2px solid #39ff14 !important;
+            box-shadow: 0 0 20px #39ff14 !important;
+            color: #39ff14 !important;
+            font-family: 'VT323', monospace !important;
+          }
+
+          .modal-header {
+            border-bottom: 1px solid #39ff14 !important;
+          }
         `}
       </style>
       <Container>
@@ -209,7 +260,11 @@ function AssylumLogs() {
                 </thead>
                 <tbody>
                   {questions.map((q, i) => (
-                    <tr key={i}>
+                    <tr
+                      key={i}
+                      onClick={() => handleQuestionClick(q)}
+                      style={{ cursor: "pointer" }}
+                    >
                       <td>{q.title || q.title}</td>
                       <td>{q.content || q.content}</td>
                     </tr>
@@ -264,6 +319,61 @@ function AssylumLogs() {
           </>
         )}
       </Container>
+
+      <Modal
+        show={showAnswerModal}
+        onHide={() => setShowAnswerModal(false)}
+        centered
+        contentClassName="riddler-modal"
+      >
+        <Modal.Header closeButton closeVariant="white">
+          <Modal.Title>LOG DETAILS</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {activeQuestion && (
+            <>
+              <h4>{activeQuestion.title}</h4>
+              <p>{activeQuestion.content || activeQuestion.question}</p>
+              <hr style={{ borderColor: "#39ff14" }} />
+              <h5>ANSWERS:</h5>
+              {currentAnswers.length > 0 ? (
+                <ul className="list-unstyled">
+                  {currentAnswers.map((ans, idx) => (
+                    <li key={idx} className="mb-2">
+                      <strong className="text-success">&gt;</strong>{" "}
+                      {ans.answer}{" "}
+                      <small className="text-muted">({ans.userID})</small>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No answers yet.</p>
+              )}
+              <hr style={{ borderColor: "#39ff14" }} />
+              <Form onSubmit={handleAnswerSubmit}>
+                <Form.Group className="mb-3">
+                  <Form.Label>ADD ANSWER</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    value={answerInput}
+                    onChange={(e) => setAnswerInput(e.target.value)}
+                    className="riddler-input"
+                    required
+                  />
+                </Form.Group>
+                <Button
+                  type="submit"
+                  variant="outline-success"
+                  className="btn-neon"
+                >
+                  SUBMIT
+                </Button>
+              </Form>
+            </>
+          )}
+        </Modal.Body>
+      </Modal>
     </div>
   );
 }

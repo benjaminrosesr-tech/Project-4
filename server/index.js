@@ -4,7 +4,7 @@ import db from "./dataDBConnections.js";
 import userrouter from "./router/userrouter.js";
 import profilerouter from "./router/profilerouter.js";
 import categoriesrouter from "./router/categoriesrouter.js";
-
+import answerrouter from "./router/answererouter.js";
 
 
 
@@ -16,6 +16,8 @@ server.use(cors());
 server.use("/profile" , profilerouter)
 server.use("/user", userrouter);
 server.use("/categories", categoriesrouter)
+server.use("/answers", answerrouter);
+
 
 server.get("/", (req, res) => {
   res.send("The server is running");
