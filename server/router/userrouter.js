@@ -45,17 +45,19 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const [agents] = await db.query("SELECT * FROM users WHERE agentID = ?", [
-      agentID,
-    ]);
+    const [agents] = await db.query(
+      "SELECT * FROM users WHERE agentID = ? AND passcode = ?",
+      [agentID, passcode],
+    );
 
-    if (agents.length === 0 || agents[0].passcode !== passcode) {
-      return res.status(401).json({ message: "Invalid Agent ID or Passcode" });
-    }
+   // if (agents.length === 0 || agents[0].passcode !== passcode) {
+   //   return res.status(401).json({ message: "Invalid Agent ID or Passcode" });
+   // }
 
+   console.log(agents)
     res
       .status(200)
-      .json({ message: "Access Granted", agentID: agents[0].agentID });
+      .json({ message: "Access Granted", agentID: agents[0].agentID, userID: agents[0].userID});
   } catch (error) {
     console.error("Database error:", error);
     res.status(500).json({ message: "Internal System Error" });

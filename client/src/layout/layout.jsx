@@ -30,7 +30,8 @@ function Layout() {
             <Nav>
               <Nav.Link
                 onClick={() => {
-                  localStorage.clear();
+                  localStorage.removeItem("agentID");
+                  localStorage.removeItem("userID");
                   window.location.href = "/";
                 }}
               >

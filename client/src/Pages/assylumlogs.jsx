@@ -47,6 +47,8 @@ function AssylumLogs() {
 
   const handleAddQuestionSubmit = (e) => {
     e.preventDefault();
+    console.log("submit")
+    console.log(localStorage.getItem("userID"))
     if (!selectedCategory) {
       alert("Please select a category first.");
       return;
@@ -78,6 +80,9 @@ function AssylumLogs() {
   };
 
   const handleQuestionClick = (question) => {
+    console.log ("Question Clicked")
+    console.log (question)
+
     setActiveQuestion(question);
     const qID = question.questionID || question.id;
 
@@ -95,11 +100,16 @@ function AssylumLogs() {
     const userID = localStorage.getItem("userID");
     if (!userID) return alert("Please log in to answer.");
 
+    console.log ("submit answer")
+    console.log (activeQuestion)
     const qID = activeQuestion.questionID || activeQuestion.id;
+    console.log("qid:", activeQuestion.questionID);
+    console.log("userID", userID)
+    console.log("answer input: ", answerInput)
 
     axios
       .post("http://localhost:4000/answers", {
-        questionID: qID,
+        questionID: activeQuestion.questionID,
         userID,
         answer: answerInput,
       })
@@ -107,7 +117,9 @@ function AssylumLogs() {
         setAnswerInput("");
         return axios.get(`http://localhost:4000/answers/${qID}`);
       })
-      .then((res) => setCurrentAnswers(res.data))
+      .then((res) => {
+        console.log (res.data)
+        setCurrentAnswers(res.data)})
       .catch((err) => alert("Failed to add answer"));
   };
 
@@ -342,7 +354,7 @@ function AssylumLogs() {
                     <li key={idx} className="mb-2">
                       <strong className="text-success">&gt;</strong>{" "}
                       {ans.answer}{" "}
-                      <small className="text-muted">({ans.userID})</small>
+                      <small className="">{ans.content}</small>
                     </li>
                   ))}
                 </ul>

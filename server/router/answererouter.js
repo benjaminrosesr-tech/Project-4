@@ -10,6 +10,7 @@ router.get("/:questionID", async (req, res) => {
     const questionID = req.params.questionID;
     const query = "SELECT * FROM answers WHERE questionID = ?";
     const [results] = await db.query(query, [questionID]);
+    console.log (results)
     res.json(results);
   } catch (error) {
     console.error("Error fetching answers:", error);
@@ -19,7 +20,12 @@ router.get("/:questionID", async (req, res) => {
 
 // POST /answers - Add a new answer
 router.post("/", async (req, res) => {
-  const { questionID, userID, content } = req.body;
+  console.log ("isiderrouter")
+  const userID = req.body.userID
+  const questionID = req.body.questionID; 
+  const content = req.body.answer
+
+  console.log ("userID", userID, "questionID", questionID, "content", content)
 
   if (!questionID || !userID || !content) {
     return res.status(400).json({ message: "Missing required fields" });

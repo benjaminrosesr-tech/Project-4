@@ -58,9 +58,11 @@ function Home() {
           setIsRegistering(false);
         } else {
           setIsLoggedIn(true);
+          console.log(data)
           localStorage.setItem("userID", data.userID);
           localStorage.setItem("agentID", agentID);
           handleClose();
+          console.log ("get:", localStorage.getItem ("userID"))
         }
       } else {
         alert(`ACCESS DENIED: ${data.message}`);
