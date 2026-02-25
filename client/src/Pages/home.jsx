@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -16,6 +16,15 @@ function Home() {
   const [agentID, setagentID] = useState("");
   const [passcode, setpasscode] = useState("");
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const storedUserID = localStorage.getItem("userID");
+    const storedAgentID = localStorage.getItem("agentID");
+    if (storedUserID) {
+      setIsLoggedIn(true);
+      setagentID(storedAgentID || "");
+    }
+  }, []);
 
   const handleClose = () => {
     setShowModal(false);
@@ -49,6 +58,8 @@ function Home() {
           setIsRegistering(false);
         } else {
           setIsLoggedIn(true);
+          localStorage.setItem("userID", data.userID);
+          localStorage.setItem("agentID", agentID);
           handleClose();
         }
       } else {

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Table from "react-bootstrap/Table";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import axios from "axios";
 import riddlerBg from "../imgs/riddlercode.jpg";
 
@@ -8,6 +10,7 @@ function AssylumLogs() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [questions, setQuestions] = useState([]);
+  const [newQuestion, setNewQuestion] = useState({ title: "", content: "" });
 
   useEffect(() => {
     // Fetch categories from the database
@@ -30,6 +33,43 @@ function AssylumLogs() {
       .get(`http://localhost:4000/categories/${categoryID}/questions`)
       .then((res) => setQuestions(res.data))
       .catch((err) => console.error("Error fetching questions:", err));
+  };
+
+  const handleNewQuestionChange = (e) => {
+    const { name, value } = e.target;
+    setNewQuestion((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddQuestionSubmit = (e) => {
+    e.preventDefault();
+    if (!selectedCategory) {
+      alert("Please select a category first.");
+      return;
+    }
+    const categoryID = selectedCategory.categoryID || selectedCategory.id;
+    const userID = localStorage.getItem("userID");
+
+    if (!userID || userID === "undefined") {
+      alert("User ID not found. Please log out and log in again.");
+      return;
+    }
+
+    axios
+      .post(`http://localhost:4000/categories/${categoryID}/questions`, {
+        ...newQuestion,
+        userID,
+      })
+      .then(() => {
+        alert("Log added successfully!");
+        handleCategoryClick(selectedCategory); // Re-triggers fetch for questions
+        setNewQuestion({ title: "", content: "" }); // Reset form
+      })
+      .catch((err) => {
+        console.error("Error adding question:", err);
+        alert(
+          `Failed to add log: ${err.response?.data?.message || err.message}`,
+        );
+      });
   };
 
   return (
@@ -81,6 +121,44 @@ function AssylumLogs() {
             box-shadow: 0 0 10px #39ff14;
             cursor: pointer;
           }
+
+          .riddler-card {
+            border: 2px solid #39ff14;
+            box-shadow: 0 0 15px #39ff14, inset 0 0 15px #39ff14;
+            background-color: rgba(0, 0, 0, 0.9);
+          }
+
+          .riddler-input {
+            background-color: #111 !important;
+            border: 1px solid #39ff14 !important;
+            color: #39ff14 !important;
+            font-family: 'VT323', monospace !important;
+          }
+
+          .riddler-input:focus {
+            background-color: #000 !important;
+            border-color: #39ff14 !important;
+            box-shadow: 0 0 10px #39ff14 !important;
+            color: #39ff14 !important;
+          }
+
+          .btn-neon {
+            background-color: transparent;
+            border: 1px solid #39ff14;
+            color: #39ff14;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 5px #39ff14;
+          }
+
+          .btn-neon:hover {
+            background-color: #39ff14;
+            color: #000;
+            box-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
+            border-color: #39ff14;
+          }
         `}
       </style>
       <Container>
@@ -116,28 +194,74 @@ function AssylumLogs() {
         </Table>
 
         {selectedCategory && (
-          <div className="mt-5">
-            <h3 className="text-center neon-text mb-3">
-              LOGS FOR:{" "}
-              {selectedCategory.name || selectedCategory.category_name}
-            </h3>
-            <Table responsive hover className="riddler-table">
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>QUESTION</th>
-                </tr>
-              </thead>
-              <tbody>
-                {questions.map((q, i) => (
-                  <tr key={i}>
-                    <td>{q.title || q.title}</td>
-                    <td>{q.content || q.question}</td>
+          <>
+            <div className="mt-5">
+              <h3 className="text-center neon-text mb-3">
+                LOGS FOR:{" "}
+                {selectedCategory.name || selectedCategory.category_name}
+              </h3>
+              <Table responsive hover className="riddler-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>QUESTION</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          </div>
+                </thead>
+                <tbody>
+                  {questions.map((q, i) => (
+                    <tr key={i}>
+                      <td>{q.title || q.title}</td>
+                      <td>{q.content || q.content}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+
+            <div className="mt-5">
+              <h3 className="text-center neon-text mb-3">
+                ADD NEW LOG TO:{" "}
+                {selectedCategory.name || selectedCategory.category_name}
+              </h3>
+              <Form
+                onSubmit={handleAddQuestionSubmit}
+                className="riddler-card p-4"
+              >
+                <Form.Group className="mb-3">
+                  <Form.Label>TITLE</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="title"
+                    value={newQuestion.title}
+                    onChange={handleNewQuestionChange}
+                    className="riddler-input"
+                    placeholder="Enter log title"
+                    required
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>QUESTION / LOG</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="content"
+                    value={newQuestion.content}
+                    onChange={handleNewQuestionChange}
+                    className="riddler-input"
+                    placeholder="Riddle me this..."
+                    required
+                  />
+                </Form.Group>
+                <Button
+                  variant="outline-success"
+                  type="submit"
+                  className="btn-neon"
+                >
+                  ADD LOG
+                </Button>
+              </Form>
+            </div>
+          </>
         )}
       </Container>
     </div>
