@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/Project-4/static/css/main.fb665e37.css",
+    "main.js": "/Project-4/static/js/main.0675e607.js",
+    "static/js/453.eca5f793.chunk.js": "/Project-4/static/js/453.eca5f793.chunk.js",
+    "static/media/riddlercode.jpg": "/Project-4/static/media/riddlercode.1eb228fa235dc6ad5f1c.jpg",
+    "index.html": "/Project-4/index.html",
+    "main.fb665e37.css.map": "/Project-4/static/css/main.fb665e37.css.map",
+    "main.0675e607.js.map": "/Project-4/static/js/main.0675e607.js.map",
+    "453.eca5f793.chunk.js.map": "/Project-4/static/js/453.eca5f793.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.fb665e37.css",
+    "static/js/main.0675e607.js"
+  ]
+}
