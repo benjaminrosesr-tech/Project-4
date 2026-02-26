@@ -2,13 +2,14 @@
 Riddlers assylum should be a message board that looks like it was pulled out of a Arkham Knights style video game where the Riddler uses his tech prowess to set up a message board for the villains of the land. Made ro have a modern Hacker feel like you would see in the Theater. Using a Black and green theme to relive the old DOS days of computer programing and hacking.
 
 ## Technology
-1. JSON
+1. MySQL
 2. React
 3. JavaScript
 4. Bootstrap
 5. HTML
 6. CSS
-7. MySql 
+7. JSON
+8. Node.Js
 
 
 
