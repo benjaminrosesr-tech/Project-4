@@ -6,10 +6,10 @@ Riddlers assylum should be a message board that looks like it was pulled out of 
 2. React
 3. JavaScript
 4. Bootstrap
-5. HTML
-6. CSS
-7. JSON
-8. Node.Js
+5. JSON
+6. Node.Js
+7. Html
+8. CSS
 
 
 
@@ -17,9 +17,11 @@ Riddlers assylum should be a message board that looks like it was pulled out of 
 1. As a user i want to feel the 80's batman hacker style nostalgia
 2. As a user i want it to seam like info is hidden untill items are requested
 3. As a user i would like there to be some element representing early computer hacking a DOS screens
+
 ## Wire Frame
 
 <img src="./imgs/mysqlrouting.png">
+<br/>
 <img src="./imgs/Riddlers Assylum.png">
 <img src="./imgs/page1.png">
 <img src="./imgs/loginscreen.png">
