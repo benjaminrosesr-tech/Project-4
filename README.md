@@ -71,7 +71,7 @@ Riddlers assylum should be a message board that looks like it was pulled out of 
             CONSTRAINT `fk_answer_question` FOREIGN KEY (`questionID`) REFERENCES `questions` (`questionID`) ON DELETE CASCADE,
             CONSTRAINT `fk_answer_user` FOREIGN KEY (`userID`) REFERENCES `users` (`userID`) ON DELETE CASCADE
         ) 
-        ```
+ ```
 
 
 
