@@ -4,12 +4,13 @@ Riddlers assylum should be a message board that looks like it was pulled out of 
 ## Technology
 1. MySQL
 2. React
-3. JavaScript
+3. express
 4. Bootstrap
 5. JSON
 6. Node.Js
 7. Html
 8. CSS
+9. JS
 
 
 
